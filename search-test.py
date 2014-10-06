@@ -13,15 +13,15 @@ try:
     tso = TwitterSearchOrder() # create a TwitterSearchOrder object
     tso.setKeywords(['Coffee', 'NYC']) # let's define all words we would like to have a look for
     tso.setLanguage('en') # english
-    tso.setCount(7) # please dear Mr Twitter, only give us 7 results per page
+    tso.setCount(10) # 10 results per search call
     tso.setIncludeEntities(True) # and give us all those entity information
 
     # it's about time to create a TwitterSearch object with our secret tokens
     ts = TwitterSearch(
-        consumer_key = '9j6Mx6ZWELrnaar2UI9uTF8Rx',
-        consumer_secret = 'GqlV4f9N7x7iGxEG2bwL31p7j39FxRxLHGjVQV7iOlZtZDoZnj',
-        access_token = '2809772576-V41WIxqN54RzR1UKBjYaccIEVJN1veAQzQT4lUK',
-        access_token_secret = 'YPpyX9fQGs7APl17BifqS9P5XKIG9JJk7fQw4Wu4Ui8V1'
+        consumer_key = 'insert',
+        consumer_secret = 'your',
+        access_token = 'keys',
+        access_token_secret = 'here'
      )
     pp = pprint.PrettyPrinter(indent=4)
 
