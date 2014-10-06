@@ -6,6 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--since_id", help="since_id for query")
 parser.add_argument("--out_file", help="the file to output results")
 parser.add_argument("--include_entities", help="whether to include entitites")
+parser.add_argument("--key_file", help="where to read in the keys")
 args = parser.parse_args()
 
 
