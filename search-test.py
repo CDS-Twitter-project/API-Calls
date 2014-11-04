@@ -10,6 +10,7 @@ parser.add_argument("--include_entities", help="whether to include entitites", d
 parser.add_argument("--key_file", help="where to read in the keys from, which should be a file with four lines, containing the consumer_key, consumer_secret, access_token, and access_token secret (or just change the values in the script)")
 parser.add_argument("--search_terms", help="search terms for the search", nargs='+', required=True)
 parser.add_argument("--num_results", help="number of results you want", type=int, default=100)
+parser.add_argument("--config_file", help="the config file with the tweet to start from", default="conf.txt")
 
 args = parser.parse_args()
 print "Search Terms: ", args.search_terms
@@ -38,8 +39,8 @@ if args.num_results > 100:
 
 print(tso.createSearchURL());
 start_point = 0
-if os.path.isfile(args.out_file):
-    with file(args.out_file) as fout:
+if os.path.isfile(args.config_file):
+    with file(args.config_file) as fout:
         newest = fout.readlines()[-1]
         try:
             print 'Newest tweet already seen: %s' % newest
@@ -79,6 +80,7 @@ try:
 
             with open(args.out_file,'a') as fout:
                 json.dump(tweet, fout)
+                fout.write('\n')
                 #pprint.pprint(tweet,stream=fout)
 
             if (latest_id == 0):
@@ -96,9 +98,9 @@ try:
     if (num_tweets > 0):
         print "Oldest tweet id seen: %i" % next_max_id
         print "Newest tweet id seen: %i" % latest_id
-        with open(args.out_file,'a') as fout:
+        with open(args.config_file,'w') as fout:
             pprint.pprint(latest_id,stream=fout)
 except:
     print "Newest tweet id seen: %i" % latest_id
-    with open(args.out_file,'a') as fout:
+    with open(args.config_file,'w') as fout:
         pprint.pprint(latest_id,stream=fout)
