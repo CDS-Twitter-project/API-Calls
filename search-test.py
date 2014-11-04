@@ -1,6 +1,7 @@
 import pprint
 import argparse
 import os.path
+import json
 from TwitterSearch import *
 
 parser = argparse.ArgumentParser()
@@ -63,39 +64,41 @@ response = ts.searchTweets(tso)
 latest_id = 0
 num_tweets = 0
 next_max_id = 0
+try:
+    for i in range(iters):
+        # first query the Twitter API
+        response = ts.searchTweets(tso)
 
-for i in range(iters):
-    # first query the Twitter API
-    response = ts.searchTweets(tso)
+        # print rate limiting status
+        print "Current api calls remaining: %s" % ts.getMetadata()['x-rate-limit-remaining']
+        old_num_tweets = num_tweets
+        # check all tweets according to their ID
+        for tweet in response['content']['statuses']:
+            num_tweets += 1
+            tweet_id = tweet['id']
 
-    # print rate limiting status
-    print "Current api calls remaining: %s" % ts.getMetadata()['x-rate-limit-remaining']
-    old_num_tweets = num_tweets
-    # check all tweets according to their ID
-    for tweet in response['content']['statuses']:
-        num_tweets += 1
-        tweet_id = tweet['id']
+            with open(args.out_file,'a') as fout:
+                json.dump(tweet, fout)
+                #pprint.pprint(tweet,stream=fout)
 
-        print("Seen tweet with ID %i" % tweet_id)
+            if (latest_id == 0):
+                latest_id = tweet_id
+            # current ID is lower than current next_max_id?
+            if (tweet_id < next_max_id) or (next_max_id == 0):
+                next_max_id = tweet_id
+                next_max_id -= 1
+        tso.setMaxID(next_max_id)
+        if (num_tweets == old_num_tweets):
+            #no tweets returned... i could also check if the length is equal to 0
+            break
+
+    print "Number of tweets seen: %i" % num_tweets
+    if (num_tweets > 0):
+        print "Oldest tweet id seen: %i" % next_max_id
+        print "Newest tweet id seen: %i" % latest_id
         with open(args.out_file,'a') as fout:
-            pprint.pprint(tweet,stream=fout)
-
-        if (latest_id == 0):
-            latest_id = tweet_id
-        # current ID is lower than current next_max_id?
-        if (tweet_id < next_max_id) or (next_max_id == 0):
-            next_max_id = tweet_id
-            next_max_id -= 1
-    tso.setMaxID(next_max_id)
-    if (num_tweets == old_num_tweets):
-        #no tweets returned... i could also check if the length is equal to 0
-        break
-
-print "Number of tweets seen: %i" % num_tweets
-if (num_tweets > 0):
-    print "Oldest tweet id seen: %i" % next_max_id
+            pprint.pprint(latest_id,stream=fout)
+except:
     print "Newest tweet id seen: %i" % latest_id
     with open(args.out_file,'a') as fout:
         pprint.pprint(latest_id,stream=fout)
-
-
