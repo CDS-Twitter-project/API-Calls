@@ -15,7 +15,7 @@ parser.add_argument("--config_file", help="the config file with the tweet to sta
 args = parser.parse_args()
 print "Search Terms: ", args.search_terms
 keys = []  #a list containing the consumer key, consumer secret, access token, and access token secret
-if args.out_file:
+if args.key_file:
     with file(args.key_file) as key_file:
         for line in key_file:
             keys.append(line.strip())
