@@ -21,23 +21,23 @@ if args.key_file:
             keys.append(line.strip())
 
 else:
-   keys.append('insert') #consumer key
-   keys.append('your') #consumer secret
-   keys.append('keys') #access token
-   keys.append('here') #access token secret
+   keys.append('uEbv4WTyoQO3Bvt77hTzUDOli') #consumer key
+   keys.append('uAh7qknF62Na3CUtdafwzqfCGyESJWFxzIkLRPnG7h2bszisO7') #consumer secret
+   keys.append('2809772576-7GtBXQvM8UpbAc2RbqqpRw4Muoi8m8jV3Cv0NGY') #access token
+   keys.append('JCaEvCM9q8FdqngP5IdUYu4119UV6l5RoXdOf1AA4bi5w') #access token secret
 
 tso = TwitterSearchOrder() # create a TwitterSearchOrder object
-tso.setKeywords(args.search_terms) # let's define all words we would like to have a look for
-tso.setLanguage('en') # english
-tso.setCount(min(args.num_results, 100))
-tso.setIncludeEntities(args.include_entities) # and give us all those entity information
+tso.set_keywords(args.search_terms) # let's define all words we would like to have a look for
+tso.set_language('en') # english
+tso.set_count(min(args.num_results, 100))
+tso.set_include_entities(args.include_entities) # and give us all those entity information
 
 iters = 1
 if args.num_results > 100:
     args.num_results += 99
     iters = args.num_results / 100
 
-print(tso.createSearchURL());
+print(tso.create_search_url());
 start_point = 0
 if os.path.isfile(args.config_file):
     with file(args.config_file) as fout:
@@ -60,18 +60,16 @@ ts = TwitterSearch(
  )
 pp = pprint.PrettyPrinter(indent=4)
 
-response = ts.searchTweets(tso)
-
 latest_id = 0
 num_tweets = 0
 next_max_id = 0
 try:
     for i in range(iters):
         # first query the Twitter API
-        response = ts.searchTweets(tso)
+        response = ts.search_tweets(tso)
 
         # print rate limiting status
-        print "Current api calls remaining: %s" % ts.getMetadata()['x-rate-limit-remaining']
+        print "Current api calls remaining: %s" % ts.get_metadata()['x-rate-limit-remaining']
         old_num_tweets = num_tweets
         # check all tweets according to their ID
         for tweet in response['content']['statuses']:
@@ -89,7 +87,7 @@ try:
             if (tweet_id < next_max_id) or (next_max_id == 0):
                 next_max_id = tweet_id
                 next_max_id -= 1
-        tso.setMaxID(next_max_id)
+        tso.set_max_id(next_max_id)
         if (num_tweets == old_num_tweets):
             #no tweets returned... i could also check if the length is equal to 0
             break
