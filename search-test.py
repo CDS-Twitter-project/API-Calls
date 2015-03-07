@@ -21,10 +21,10 @@ if args.key_file:
             keys.append(line.strip())
 
 else:
-   keys.append('uEbv4WTyoQO3Bvt77hTzUDOli') #consumer key
-   keys.append('uAh7qknF62Na3CUtdafwzqfCGyESJWFxzIkLRPnG7h2bszisO7') #consumer secret
-   keys.append('2809772576-7GtBXQvM8UpbAc2RbqqpRw4Muoi8m8jV3Cv0NGY') #access token
-   keys.append('JCaEvCM9q8FdqngP5IdUYu4119UV6l5RoXdOf1AA4bi5w') #access token secret
+   keys.append('insert') #consumer key
+   keys.append('your') #consumer secret
+   keys.append('keys') #access token
+   keys.append('here') #access token secret
 
 tso = TwitterSearchOrder() # create a TwitterSearchOrder object
 tso.set_keywords(args.search_terms) # let's define all words we would like to have a look for
